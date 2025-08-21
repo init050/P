@@ -1,0 +1,28 @@
+Welcome to Plant Shop!
+
+Hello {{ user.username|default:user.email }},
+
+Thank you for joining Plant Shop! We're excited to have you as part of our growing plant community.
+
+To complete your registration, please verify your email address by clicking the following link:
+
+{{ verification_url }}
+
+This verification link will expire in {{ expiry_hours }} hours.
+
+If you didn't create an account with Plant Shop, please ignore this email.
+
+Once verified, you'll be able to:
+- Browse our extensive plant catalog
+- Get personalized plant care recommendations  
+- Join our community discussions
+- Receive exclusive offers and updates
+
+If you have any questions, please contact our support team.
+
+Best regards,
+The Plant Shop Team
+
+---
+Plant Shop
+© 2025 Plant Shop. All rights reserved.

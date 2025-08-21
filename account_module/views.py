@@ -316,14 +316,18 @@ class EmailVerificationConfirmView(generic.View):
 
 
 class CustomPasswordResetView(PasswordResetView):
-    # This view initiates the password reset process. By inheriting from PasswordResetView,
-    # we get the logic for sending the reset email for free. We just need to
-    # point it to our custom form and templates.
     form_class = CustomPasswordResetForm
     template_name = 'account_module/password_reset_form.html'
-    email_template_name = 'account_module/password_reset_email.html'
+    email_template_name = 'account_module/password_reset_email.txt'  
     subject_template_name = 'account_module/password_reset_subject.txt'
     success_url = reverse_lazy('account_module:password_reset_done')
+
+    def form_valid(self, form):
+        messages.success(
+            self.request,
+            _('If an account exists with this email, you will receive password reset instructions.')
+        )
+        return super().form_valid(form)
 
     def form_valid(self, form):
         messages.success(

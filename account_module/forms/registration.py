@@ -105,3 +105,4 @@ class UserProfileForm(ModelForm):
         for field_name in self.fields:
             if field_name not in ['avatar']:
                 self.fields[field_name].disabled = True
+                

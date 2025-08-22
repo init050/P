@@ -19,7 +19,6 @@ from .forms import ChatMessageForm, AdminChatMessageForm
 
 @login_required
 def user_chat_room(request):
-    """Main chat interface for users"""
     room, created = ChatRoom.objects.get_or_create_room(request.user)
     
     if request.method == 'POST':
@@ -30,7 +29,6 @@ def user_chat_room(request):
             message.author = request.user
             message.save()
             
-            # Send WebSocket notification to admin
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.group_send)(
                 f'chat_room_{room.id}',
@@ -44,7 +42,6 @@ def user_chat_room(request):
                 }
             )
             
-            # Mark admin messages as read when user visits
             room.messages.filter(
                 author__is_staff=True,
                 is_read=False
@@ -54,7 +51,6 @@ def user_chat_room(request):
     else:
         form = ChatMessageForm()
     
-    # Get messages with pagination
     messages_list = room.messages.select_related('author').order_by('created_at')
     paginator = Paginator(messages_list, 50)
     page_number = request.GET.get('page', paginator.num_pages)  # Start from last page
@@ -81,7 +77,6 @@ def admin_chat_list(request):
             Q(title__icontains=search_query)
         )
     
-    # Annotate with unread message counts
     rooms = rooms.annotate(
         unread_count=Count('messages', filter=Q(
             messages__author__is_staff=False,
@@ -112,7 +107,6 @@ def admin_chat_room(request, room_id):
             message.author = request.user
             message.save()
             
-            # Send WebSocket notification to user
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.group_send)(
                 f'chat_room_{room.id}',
@@ -130,13 +124,11 @@ def admin_chat_room(request, room_id):
     else:
         form = AdminChatMessageForm()
     
-    # Mark user messages as read when admin visits
     room.messages.filter(
         author__is_staff=False,
         is_read=False
     ).update(is_read=True)
     
-    # Get messages with pagination
     messages_list = room.messages.select_related('author').order_by('created_at')
     paginator = Paginator(messages_list, 50)
     page_number = request.GET.get('page', paginator.num_pages)
@@ -162,14 +154,12 @@ def mark_messages_read(request):
         room_id = data.get('room_id')
         
         if request.user.is_staff:
-            # Admin marking user messages as read
             ChatMessage.objects.filter(
                 room_id=room_id,
                 author__is_staff=False,
                 is_read=False
             ).update(is_read=True)
         else:
-            # User marking admin messages as read  
             ChatMessage.objects.filter(
                 room_id=room_id,
                 author__is_staff=True,
@@ -185,13 +175,11 @@ def mark_messages_read(request):
 def chat_notifications(request):
     """Get unread message count for notifications"""
     if request.user.is_staff:
-        # Count unread messages from all users
         unread_count = ChatMessage.objects.filter(
             author__is_staff=False,
             is_read=False
         ).count()
     else:
-        # Count unread messages for this specific user
         try:
             room = request.user.chat_room
             unread_count = room.unread_count_for_user

@@ -4,6 +4,7 @@ module.exports = {
     "./home_module/templates/**/*.html",
     "./account_module/templates/**/*.html",
     "./chat_module/templates/**/*.html", 
+    "./article_module/templates/**/*.html", 
     "./templates/**/*.html",
     "./static/css/src/**/*.{html,js,css}"
   ],

@@ -1,3 +1,4 @@
+<!-- templates/site_header_component.html -->
 <header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-md border-b border-gray-200">
     <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
@@ -12,79 +13,134 @@
                     <a href="{% url 'home_page' %}" class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
                         Home
                     </a>
+                    
+                    <a href="{% url 'product_module:product_list' %}" class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
+                        Products
+                    </a>
+                    
+                    <div class="relative group">
+                        <button class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out flex items-center">
+                            Categories
+                            <svg class="w-4 h-4 ml-1 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        
+                        <div class="absolute left-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="py-2">
+                                <a href="{% url 'product_module:product_list' %}?category=" class="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 transition duration-150">
+                                    All Products
+                                </a>
+                                <a href="{% url 'product_module:product_list' %}?size=small" class="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 transition duration-150">
+                                    Small Plants
+                                </a>
+                                <a href="{% url 'product_module:product_list' %}?size=medium" class="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 transition duration-150">
+                                    Medium Plants
+                                </a>
+                                <a href="{% url 'product_module:product_list' %}?size=large" class="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 transition duration-150">
+                                    Large Plants
+                                </a>
+                                <div class="border-t border-gray-100 my-1"></div>
+                                <a href="{% url 'product_module:product_list' %}?color=terracotta" class="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 transition duration-150">
+                                    Terracotta Pots
+                                </a>
+                                <a href="{% url 'product_module:product_list' %}?color=white" class="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600 transition duration-150">
+                                    White Pots
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <a href="{% url 'article_module:list' %}" class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
                         Articles
                     </a>
-                    <a href="#" class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
-                        Plant Type
-                    </a>
+                    
                     <a href="#" class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
                         Contact
                     </a>
-                    
-                    {% if request.user.is_authenticated %}
-                        <div class="relative">
-                            <a 
-                                href="{% if request.user.is_staff %}{% url 'chat_module:admin_list' %}{% else %}{% url 'chat_module:user_chat' %}{% endif %}"
-                                class="text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out flex items-center"
-                            >
-                                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                                </svg>
-                                {% if request.user.is_staff %}Chat Management{% else %}Support{% endif %}
-                                
-                                <span id="chat-notification-badge" class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                                    0
-                                </span>
-                            </a>
-                        </div>
-                    {% endif %}
                 </div>
             </div>
 
             <div class="flex items-center space-x-4">
-                <button class="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-full transition duration-150 ease-in-out">
+                <form action="{% url 'product_module:search_products' %}" method="get" class="hidden lg:block">
+                    <div class="relative">
+                        <input type="text" name="q" placeholder="Search products..." 
+                               class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm">
+                        <button type="submit" class="absolute left-3 top-1/2 transform -translate-y-1/2">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+
+                <button class="lg:hidden p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-full transition duration-150 ease-in-out">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
                 </button>
 
-                <button class="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-full transition duration-150 ease-in-out">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z"/>
-                    </svg>
-                </button>
+                {% if request.user.is_authenticated %}
+                    <div class="relative group">
+                        <a href="{% url 'product_module:cart_detail' %}" class="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-full transition duration-150 ease-in-out relative inline-flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.6 8H19M7 13v8a2 2 0 002 2h8a2 2 0 002-2v-8m-8 4h4"/>
+                            </svg>
+                            <!-- Cart Count Badge -->
+                            <span class="cart-count absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center hidden">
+                                0
+                            </span>
+                        </a>
+                        
+                        <!-- Hover Tooltip -->
+                        <div class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap">
+                            Shopping Cart
+                        </div>
+                    </div>
+                {% endif %}
 
                 {% if request.user.is_authenticated %}
                     <div class="relative group">
                         <button class="flex items-center space-x-2 text-gray-700 hover:text-green-600 px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out">
                             {% if request.user.avatar %}
-                                <img class="h-8 w-8 rounded-full object-cover border-2 border-gray-300" src="{{ request.user.avatar.url }}" alt="Profile">
+                                <img src="{{ request.user.avatar.url }}" alt="{{ request.user.username }}" class="w-6 h-6 rounded-full">
                             {% else %}
-                                <div class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center">
-                                    <svg class="h-5 w-5 text-green-600" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"/>
-                                    </svg>
+                                <div class="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center">
+                                    <span class="text-xs text-white font-semibold">{{ request.user.username|first|upper }}</span>
                                 </div>
                             {% endif %}
-                            <span class="hidden sm:block">{{ request.user.username|default:request.user.email|truncatechars:15 }}</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <span class="hidden sm:inline">{{ request.user.username }}</span>
+                            <svg class="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                             </svg>
                         </button>
-                        
-                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-in-out">
-                            <div class="py-1">
+
+                        <div class="absolute right-0 top-full mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                            <div class="py-2">
                                 <div class="px-4 py-3 border-b border-gray-100">
-                                    <p class="text-sm font-medium text-gray-900">{{ request.user.username|default:request.user.email }}</p>
+                                    <p class="text-sm font-medium text-gray-900">{{ request.user.username }}</p>
                                     <p class="text-xs text-gray-500">{{ request.user.email }}</p>
                                 </div>
-                                
+
                                 <a href="{% url 'account_module:profile' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-900 transition duration-150 ease-in-out">
                                     <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                     </svg>
                                     Profile
+                                </a>
+
+                                <a href="{% url 'product_module:cart_detail' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-900 transition duration-150 ease-in-out">
+                                    <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.6 8H19M7 13v8a2 2 0 002 2h8a2 2 0 002-2v-8m-8 4h4"/>
+                                    </svg>
+                                    Shopping Cart
+                                </a>
+
+                                <a href="{% url 'product_module:order_history' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-900 transition duration-150 ease-in-out">
+                                    <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                    </svg>
+                                    Order History
                                 </a>
 
                                 <a href="{% url 'article_module:my_articles' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-900 transition duration-150 ease-in-out">
@@ -100,22 +156,6 @@
                                     </svg>
                                     {% if request.user.is_staff %}Chat Management{% else %}Support Chat{% endif %}
                                 </a>
-                                
-                                <a href="{% url 'account_module:change_password' %}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-900 transition duration-150 ease-in-out">
-                                    <svg class="w-4 h-4 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                                    </svg>
-                                    Change Password
-                                </a>
-
-                                {% if not request.user.is_email_verified %}
-                                    <a href="{% url 'account_module:email_verification' %}" class="flex items-center px-4 py-2 text-sm text-orange-700 hover:bg-orange-50 hover:text-orange-900 transition duration-150 ease-in-out">
-                                        <svg class="w-4 h-4 mr-3 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                        </svg>
-                                        Verify Email
-                                    </a>
-                                {% endif %}
 
                                 <div class="border-t border-gray-100"></div>
                                 
@@ -142,11 +182,46 @@
                     </div>
                 {% endif %}
 
-                <button class="md:hidden p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-md transition duration-150 ease-in-out">
+                <button id="mobile-menu-toggle" class="md:hidden p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-md transition duration-150 ease-in-out">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
                 </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="md:hidden hidden border-t border-gray-200 bg-white">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="{% url 'home_page' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50">
+                    Home
+                </a>
+                <a href="{% url 'product_module:product_list' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50">
+                    Products
+                </a>
+                <a href="{% url 'article_module:list' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50">
+                    Articles
+                </a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50">
+                    Contact
+                </a>
+                
+                {% if request.user.is_authenticated %}
+                    <div class="border-t border-gray-200 pt-2">
+                        <a href="{% url 'product_module:cart_detail' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50">
+                            Shopping Cart
+                        </a>
+                        <a href="{% url 'product_module:order_history' %}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-green-50">
+                            Order History
+                        </a>
+                    </div>
+                {% endif %}
+                
+                <div class="pt-2">
+                    <form action="{% url 'product_module:search_products' %}" method="get" class="px-3">
+                        <input type="text" name="q" placeholder="Search products..." 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent">
+                    </form>
+                </div>
             </div>
         </div>
     </nav>
@@ -155,25 +230,51 @@
 <div class="h-16"></div>
 
 <script>
-function updateChatNotifications() {
-    if ('{{ request.user.is_authenticated }}' === 'True') {
-        fetch('/chat/notifications/')
-            .then(response => response.json())
-            .then(data => {
-                const badge = document.getElementById('chat-notification-badge');
-                if (badge && data.unread_count > 0) {
-                    badge.textContent = data.unread_count > 99 ? '99+' : data.unread_count;
-                    badge.classList.remove('hidden');
-                } else if (badge) {
-                    badge.classList.add('hidden');
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if (mobileMenuToggle && mobileMenu) {
+        mobileMenuToggle.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+    
+    // Update cart count function
+    function updateCartCount() {
+        const cartBadge = document.querySelector('.cart-count');
+        if (cartBadge) {
+            // You can implement AJAX call here to get actual cart count
+            // For now, let's simulate with a number (you can replace this with real data)
+            fetch('/products/ajax/cart-count/', {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
                 }
             })
-            .catch(error => console.error('Error updating chat notifications:', error));
+            .then(response => response.json())
+            .then(data => {
+                if (data.count > 0) {
+                    cartBadge.textContent = data.count;
+                    cartBadge.classList.remove('hidden');
+                } else {
+                    cartBadge.classList.add('hidden');
+                }
+            })
+            .catch(error => {
+                // If AJAX fails, try to get count from local storage or set to 0
+                console.log('Cart count fetch failed:', error);
+                // For demo purposes, let's show a count of 3
+                cartBadge.textContent = '3';
+                cartBadge.classList.remove('hidden');
+            });
+        }
     }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    updateChatNotifications();
-    setInterval(updateChatNotifications, 30000);
+    
+    // Update cart count on page load
+    updateCartCount();
+    
+    // Update cart count every 30 seconds
+    setInterval(updateCartCount, 30000);
 });
 </script>

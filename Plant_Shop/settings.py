@@ -1,19 +1,23 @@
-import os
+"""
+Django settings for Plant_Shop project.
+"""
+
 from pathlib import Path
-from django.core.management.utils import get_random_secret_key
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
-DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+# Security settings
+SECRET_KEY = 'django-insecure-gdg-5(=%%8v6l&p*w)t0*a^79y+ja%-a8pn1h$f1&p%8dp*h^k'
 
-allowed_hosts_env = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1')
-ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_env.split(',')]
+# TEMPORARY FIX: Set DEBUG=True for development
+DEBUG = True  # Change to False in production
 
+# For development
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*'] if DEBUG else []
 
-
+# Application definition
 INSTALLED_APPS = [
-    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -31,18 +35,7 @@ INSTALLED_APPS = [
     'taggit',
     'crispy_forms',
     'chat_module',
-    'channels',
 ]
-
-
-
-ASGI_APPLICATION = 'Plant_Shop.asgi.application'
-
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-    },
-}
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = "tailwind"
@@ -76,12 +69,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Plant_Shop.wsgi.application'
-
 AUTH_USER_MODEL = 'account_module.User'
 
-MEDIA_ROOT = BASE_DIR / 'uploads'
-MEDIA_URL = '/medias/'
-
+# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -89,10 +79,7 @@ DATABASES = {
     }
 }
 
-if os.getenv('DATABASE_URL'):
-    import dj_database_url
-    DATABASES['default'] = dj_database_url.parse(os.getenv('DATABASE_URL'))
-
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -108,33 +95,39 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
+# Static files - IMPORTANT: This fixed the CSS issue
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# Media files
+MEDIA_URL = '/medias/'
+MEDIA_ROOT = BASE_DIR / 'uploads'
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# Site settings
 SITE_NAME = 'Plant Shop'
-if DEBUG:
-    SITE_URL = 'http://localhost:8000'
-else:
-    SITE_URL = os.getenv('SITE_URL', 'https://your-domain.com')
+SITE_URL = 'http://127.0.0.1:8000' if DEBUG else 'https://your-domain.com'
+DEFAULT_FROM_EMAIL = 'noreply@plantshop.local'
 
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@plantshop.local')
-
+# Auth URLs
 LOGIN_URL = '/user/login/'
-LOGIN_REDIRECT_URL = '/'  
-LOGOUT_REDIRECT_URL = '/user/login/'  
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/user/login/'
 
+# Logging
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
